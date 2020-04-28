@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- See Relax specification: Ghidra/Framework/SoftwareModeling/data/languages/language_definitions.rxg -->
+
+<language_definitions>
+   <language processor="SPC700"
+            endian="little"
+            size="16"
+            variant="default"
+            version="1.0"
+            slafile="spc700-native.sla"
+            processorspec="spc700.pspec"
+            manualindexfile="../manuals/spc700-native.idx"
+            id="spc700:LE:16:default">
+    <description>SPC700 Language Module</description>
+    <compiler name="default" spec="spc700.cspec" id="default"/>
+  </language> 
+</language_definitions>

@@ -1,0 +1,84 @@
+# Common definitions for the SPC700 processor definitions
+define endian=little;
+define alignment=1;
+
+define space ram     type=ram_space      size=2  default;
+define space register type=register_space size=1;
+
+define register offset=0x00 size=2 [ YA _ _ PC ];
+define register offset=0x00 size=1 [ A Y X _ SP PSW _ _ ];
+
+#define 	bitrange CF=PSW[0,1]
+#		bitrange ZF=PSW[1,1]
+#		bitrange IF=PSW[2,1]
+#		bitrange HF=PSW[3,1]
+#		bitrange BF=PSW[4,1]
+#		bitrange PF=PSW[5,1]
+#		bitrange VF=PSW[6,1]
+#		bitrange NF=PSW[7,1]
+#;
+@define CF "PSW[0,1]"
+@define ZF "PSW[1,1]"
+@define IF "PSW[2,1]"
+@define HF "PSW[3,1]"
+@define BF "PSW[4,1]"
+@define PF "PSW[5,1]"
+@define VF "PSW[6,1]"
+@define NF "PSW[7,1]"
+
+define token opcode (8)
+   op		= (0,7)
+   op_hi	= (4,7)
+   op_lo	= (0,3)
+   aaa		= (5,7)
+   bbb		= (2,4)
+   cc		= (0,1)
+;
+
+define token data8 (8)
+   imm8		= (0,7)
+   simm8	= (0,7) signed
+;
+
+define token movearg (8)
+   srcaddr	= (0,7)
+   dstaddr	= (0,7)
+;
+
+define token data16 (16)
+   imm16        = (0,15)
+;
+
+ADDR8: 	imm8 	is imm8 	{ local tmp:2 = zext(imm8:1); export *:2 tmp; }
+ADDR16: imm16 	is imm16	{ export *:2 imm16; }
+RADDR8:	addr 	is simm8	[ addr = inst_next + simm8; ] { export *:1 addr; }
+
+################################################################
+# Macros
+################################################################
+macro resultFlags(value) {
+	$(ZF) = (value == 0);
+	$(NF) = (value s< 0);
+}
+
+macro aluADC(op8, result) {
+	local c = $(CF);
+	$(NF) = 0;
+	$(HF) = (((A & 0xF) + (op8 & 0xF) + c) & 0x10) != 0;
+	$(CF) = carry(A, op8);
+	result = A + op8;
+	$(CF) = $(CF) || carry(result, c);
+	result = result + c;
+	$(ZF) = (result == 0);
+}
+
+macro aluSBC(op8, result) {
+	local c = $(CF);
+	$(NF) = 1;
+	$(HF) = (((A & 0xF) - (op8 & 0xF) - c) & 0x10) != 0;
+	$(CF) = A < op8;
+	result = A - op8;
+	$(CF) = $(CF) || result < c;
+	result = result - c;
+	$(ZF) = (result == 0);
+}
