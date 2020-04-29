@@ -53,9 +53,39 @@ ADDR8: 	imm8 	is imm8 	{ local tmp:2 = zext(imm8:1); export *:2 tmp; }
 ADDR16: imm16 	is imm16	{ export *:2 imm16; }
 RADDR8:	addr 	is simm8	[ addr = inst_next + simm8; ] { export *:1 addr; }
 
+define pcodeop daa;
+define pcodeop das;
+define pcodeop nop;
+define pcodeop sleep;
+define pcodeop stop;
+
 ################################################################
 # Macros
 ################################################################
+macro push8(value) {
+	SP = SP - 1;
+	local ptr:2 = 0x0100 + zext(SP);
+	*:1 ptr = value;
+}
+
+macro pop8(result) {
+	local ptr:2 = 0x0100 + zext(SP);
+	result = *:1 ptr;
+	SP = SP + 1;
+}
+
+macro push16(value) {
+	SP = SP - 2;
+	local ptr:2 = 0x0100 + zext(SP);
+	*:2 ptr = value;
+}
+
+macro pop16(result) {
+	local ptr:2 = 0x0100 + zext(SP);
+	result = *:2 ptr;
+	SP = SP + 2;
+}
+
 macro resultFlags(value) {
 	$(ZF) = (value == 0);
 	$(NF) = (value s< 0);
@@ -74,11 +104,10 @@ macro aluADC(op8, result) {
 
 macro aluSBC(op8, result) {
 	local c = $(CF);
-	$(NF) = 1;
 	$(HF) = (((A & 0xF) - (op8 & 0xF) - c) & 0x10) != 0;
 	$(CF) = A < op8;
 	result = A - op8;
 	$(CF) = $(CF) || result < c;
 	result = result - c;
-	$(ZF) = (result == 0);
+	resultFlags(result);
 }

@@ -1,22 +1,22 @@
 @include "spc700.sinc"
 
 #======================================================#
-# Table C-4: 8-bit Data Transmission Commands, Group 1 #
+# Table C-4: 8-bit Data Transmission Commands,Group 1 #
 #======================================================#
-:MOV A, #imm8 is op=0xE8 & A; imm8 {
+:MOV A," #"^imm8 is op=0xE8 & A; imm8 {
 	A = imm8;
 	
 	resultFlags(A);
 }
 
-:MOV A, (X) is op=0xE6 & A & X {
+:MOV A,(X) is op=0xE6 & A & X {
 	local ptr:2 = zext(X);
 	A = *:1 ptr;
 	
 	resultFlags(A);
 }
 
-:MOV A, (X)+ is op=0xBF & A & X {
+:MOV A,(X)+ is op=0xBF & A & X {
 	local ptr:2 = zext(X);
 	A = *:1 ptr;
 	X = X + 1;
@@ -24,227 +24,227 @@
 	resultFlags(A);
 }
 
-:MOV A, ADDR8 is op=0xE4 & A; ADDR8 {
+:MOV A,ADDR8 is op=0xE4 & A; ADDR8 {
 	local ptr:2 = ADDR8;
 	A = *:1 ptr;
 	
 	resultFlags(A);
 }
 
-:MOV A, ADDR8+X is op=0xF4 & A & X; ADDR8 {
+:MOV A,ADDR8+X is op=0xF4 & A & X; ADDR8 {
 	local ptr:2 = ADDR8 + zext(X);
 	A = *:1 ptr;
 	
 	resultFlags(A);
 }
 
-:MOV A, !ADDR16 is op=0xE5 & A; ADDR16 {
+:MOV A," !"^ADDR16 is op=0xE5 & A; ADDR16 {
 	A = *:1 ADDR16;
 	
 	resultFlags(A);
 }
 
-:MOV A, !ADDR16+X is op=0xF5 & A & X; ADDR16 {
+:MOV A," !"^ADDR16+X is op=0xF5 & A & X; ADDR16 {
 	local addr:2 = ADDR16 + zext(X);
 	A = *:1 addr;
 	
 	resultFlags(A);
 }
 
-:MOV A, !ADDR16+Y is op=0xF6 & A & Y; ADDR16 {
+:MOV A," !"^ADDR16+Y is op=0xF6 & A & Y; ADDR16 {
 	local addr:2 = ADDR16 + zext(Y);
 	A = *:1 addr;
 	
 	resultFlags(A);
 }
 
-:MOV A, [ADDR8+X] is op=0xE7 & A & X; ADDR8 {
+:MOV A,[ADDR8+X] is op=0xE7 & A & X; ADDR8 {
 	local ptr:2 = ADDR8 + zext(X);
-	local addr:2 = zext(*:1 ptr);
+	local addr:2 = *:2 ptr;
 	A = *:1 addr;
 	
 	resultFlags(A);
 }
 
-:MOV A, [ADDR8]+Y is op=0xF7 & A & Y; ADDR8 {
-	local ptr:1 = *:1 ADDR8;
-	local addr:2 = zext(ptr + Y);
+:MOV A,[ADDR8]+Y is op=0xF7 & A & Y; ADDR8 {
+	local ptr:2 = *:2 ADDR8;
+	local addr:2 = ptr + zext(Y);
 	A = *:1 addr;
 	
 	resultFlags(A);
 }
 
-:MOV X, #imm8 is op=0xCD & X; imm8 {
+:MOV X," #"^imm8 is op=0xCD & X; imm8 {
 	X = imm8;
 	
 	resultFlags(X);
 }
 
-:MOV X, ADDR8 is op=0xF8 & X; ADDR8 {
+:MOV X,ADDR8 is op=0xF8 & X; ADDR8 {
 	X = *:1 ADDR8;
 	
 	resultFlags(X);
 }
 
-:MOV X, ADDR8+Y is op=0xF9 & X & Y; ADDR8 {
+:MOV X,ADDR8+Y is op=0xF9 & X & Y; ADDR8 {
 	local addr:2 = ADDR8 + zext(Y);
 	X = *:1 addr;
 	
 	resultFlags(X);
 }
 
-:MOV X, !ADDR16 is op=0xE9 & X; ADDR16 {
+:MOV X," !"^ADDR16 is op=0xE9 & X; ADDR16 {
 	X = *:1 ADDR16;
 	
 	resultFlags(X);
 }
 
-:MOV Y, #imm8 is op=0x8D & Y; imm8 {
+:MOV Y," #"^imm8 is op=0x8D & Y; imm8 {
 	Y = imm8;
 	
 	resultFlags(Y);
 }
 
-:MOV Y, ADDR8 is op=0xEB & Y; ADDR8 {
+:MOV Y,ADDR8 is op=0xEB & Y; ADDR8 {
 	Y = *:1 ADDR8;
 	
 	resultFlags(Y);
 }
 
-:MOV Y, ADDR8+X is op=0xFB & X & Y; ADDR8 {
+:MOV Y,ADDR8+X is op=0xFB & X & Y; ADDR8 {
 	local addr:2 = ADDR8 + zext(X);
 	Y = *:1 addr;
 	
 	resultFlags(Y);
 }
 
-:MOV Y, !ADDR16 is op=0xEC & Y; ADDR16 {
+:MOV Y," !"^ADDR16 is op=0xEC & Y; ADDR16 {
 	Y = *:1 ADDR16;
 	
 	resultFlags(Y);
 }
 
 #======================================================#
-# Table C-5: 8-bit Data Transmission Commands, Group 2 #
+# Table C-5: 8-bit Data Transmission Commands,Group 2 #
 #======================================================#
-:MOV (X), A is op=0xC6 & A & X {
+:MOV (X),A is op=0xC6 & A & X {
 	local addr:2 = zext(X);
 	*:1 addr = A;
 }
 
-:MOV (X)+, A is op=0xAF & A & X {
+:MOV (X)+,A is op=0xAF & A & X {
 	local addr:2 = zext(X);
 	X = X + 1;
 	*:1 addr = A;
 }
 
-:MOV ADDR8, A is op=0xC4 & A; ADDR8 {
+:MOV ADDR8,A is op=0xC4 & A; ADDR8 {
 	*:1 ADDR8 = A;
 }
 
-:MOV ADDR8+X, A is op=0xD4 & A & X; ADDR8{
+:MOV ADDR8+X,A is op=0xD4 & A & X; ADDR8{
 	local addr:2 = ADDR8 + zext(X);
 	*:1 addr = A;
 }
 
-:MOV !ADDR16, A is op=0xC5 & A; ADDR16 {
+:MOV "!"^ADDR16,A is op=0xC5 & A; ADDR16 {
 	*:1 ADDR16 = A;
 }
 
-:MOV !ADDR16+X, A is op=0xD5 & A & X; ADDR16 {
+:MOV "!"^ADDR16+X,A is op=0xD5 & A & X; ADDR16 {
 	local addr:2 = ADDR16 + zext(X);
 	*:1 addr = A;
 }
 
-:MOV !ADDR16+Y, A is op=0xD6 & A & Y; ADDR16 {
+:MOV "!"^ADDR16+Y,A is op=0xD6 & A & Y; ADDR16 {
 	local addr:2 = ADDR16 + zext(Y);
 	*:1 addr = A;
 }
 
-:MOV [ADDR8+X], A is op=0xC7 & A & X; ADDR8 {
+:MOV [ADDR8+X],A is op=0xC7 & A & X; ADDR8 {
 	local ptr:2 = ADDR8 + zext(X);
 	local addr:2 = *:2 ptr;
 	*:1 addr = A;
 }
 
-:MOV [ADDR8]+Y, A is op=0xD7 & A & Y; ADDR8 {
-	local addr:2 = *:2 ADDR8;
-	addr = addr + zext(Y);
+:MOV [ADDR8]+Y,A is op=0xD7 & A & Y; ADDR8 {
+	local ptr:2 = *:2 ADDR8;
+	local addr:2 = ptr + zext(Y);
 	*:1 addr = A;
 }
 
-:MOV ADDR8, X is op=0xD8 & X; ADDR8 {
+:MOV ADDR8,X is op=0xD8 & X; ADDR8 {
 	local addr:2 = ADDR8 + zext(X);
 	*:1 addr = X;
 }
 
-:MOV ADDR8+Y, X is op=0xD9 & X & Y; ADDR8 {
+:MOV ADDR8+Y,X is op=0xD9 & X & Y; ADDR8 {
 	local addr:2 = ADDR8 + zext(Y);
 	*:1 addr = X;
 }
 
-:MOV !ADDR16, X is op=0xC9 & X; ADDR16 {
+:MOV "!"^ADDR16,X is op=0xC9 & X; ADDR16 {
 	*:1 ADDR16 = X;
 }
 
-:MOV ADDR8, Y is op=0xCB & Y; ADDR8 {
+:MOV ADDR8,Y is op=0xCB & Y; ADDR8 {
 	local addr:2 = ADDR8 + zext(Y);
 	*:1 addr = Y;
 }
 
-:MOV ADDR8+X, Y is op=0xDB & X & Y; ADDR8 {
+:MOV ADDR8+X,Y is op=0xDB & X & Y; ADDR8 {
 	local addr:2 = ADDR8 + zext(X);
 	*:1 addr = Y;
 }
 
-:MOV !ADDR16, Y is op=0xCC & Y; ADDR16 {
+:MOV "!"^ADDR16,Y is op=0xCC & Y; ADDR16 {
 	*:1 ADDR16 = Y;
 }
 
 #======================================================#
-# Table C-6: 8-bit Data Transmission Commands, Group 3 #
+# Table C-6: 8-bit Data Transmission Commands,Group 3 #
 #======================================================#
-:MOV A, X is op=0x7D & A & X {
+:MOV A,X is op=0x7D & A & X {
 	A = X;
 	
 	resultFlags(A);
 }
 
-:MOV A, Y is op=0xDD & A & Y {
+:MOV A,Y is op=0xDD & A & Y {
 	A = Y;
 	
 	resultFlags(A);
 }
 
-:MOV X, A is op=0x5D & A & X {
+:MOV X,A is op=0x5D & A & X {
 	X = A;
 	
 	resultFlags(X);
 }
 
-:MOV Y, A is op=0xFD & A & Y {
+:MOV Y,A is op=0xFD & A & Y {
 	Y = A;
 	
 	resultFlags(Y);
 }
 
-:MOV X, SP is op=0x9D & X & SP {
+:MOV X,SP is op=0x9D & X & SP {
 	X = SP;
 	
 	resultFlags(X);
 }
 
-:MOV SP, X is op=0xBD & X & SP {
+:MOV SP,X is op=0xBD & X & SP {
 	SP = X;
 }
 
-:MOV dstaddr, srcaddr is op=0xFA; dstaddr; srcaddr {
+:MOV dstaddr,srcaddr is op=0xFA; dstaddr; srcaddr {
 	local src:2 = zext(srcaddr:1);
 	local dst:2 = zext(dstaddr:1);
 	*:1 dst = *:1 src;
 } 
 
-:MOV ADDR8, #imm8 is op=0x8F; ADDR8; imm8 {
+:MOV ADDR8," #"^imm8 is op=0x8F; ADDR8; imm8 {
 	*:1 ADDR8 = imm8;
 }
 
@@ -252,77 +252,77 @@
 # Table C-7: 8-bit Arithmetic Operation Commands       #
 #======================================================#
 #=ADC=
-:ADC A, #imm8 is op=0x88 & A; imm8 {
+:ADC A," #"^imm8 is op=0x88 & A; imm8 {
 	local result:1;
-	aluADC(imm8, result);
+	aluADC(imm8,result);
 	A = result;
 }
 
-:ADC A, (X) is op=0x86 & A & X {
+:ADC A,(X) is op=0x86 & A & X {
 	local addr:2 = zext(X);
 	local tmp:1 = *:1 addr;
 	local result:1;
-	aluADC(tmp, result);
+	aluADC(tmp,result);
 	A = result;
 }
 
-:ADC A, ADDR8 is op=0x84 & A; ADDR8 {
+:ADC A,ADDR8 is op=0x84 & A; ADDR8 {
 	local tmp:1 = *:1 ADDR8;
 	local result:1;
-	aluADC(tmp, result);
+	aluADC(tmp,result);
 	A = result;
 }
 
-:ADC A, ADDR8+X is op=0x94 & A & X; ADDR8 {
+:ADC A,ADDR8+X is op=0x94 & A & X; ADDR8 {
 	local addr:2 = ADDR8 + zext(X);
 	local tmp:1 = *:1 addr;
 	local result:1;
-	aluADC(tmp, result);
+	aluADC(tmp,result);
 	A = result;
 }
 
-:ADC A, !ADDR16 is op=0x85 & A; ADDR16 {
+:ADC A," !"^ADDR16 is op=0x85 & A; ADDR16 {
 	local tmp:1 = *:1 ADDR16;
 	local result:1;
-	aluADC(tmp, result);
+	aluADC(tmp,result);
 	A = result;
 }
 
-:ADC A, !ADDR16+X is op=0x95 & A & X; ADDR16 {
+:ADC A," !"^ADDR16+X is op=0x95 & A & X; ADDR16 {
 	local addr:2 = ADDR16 + zext(X);
 	local tmp:1 = *:1 addr;
 	local result:1;
-	aluADC(tmp, result);
+	aluADC(tmp,result);
 	A = result;
 }
 
-:ADC A, !ADDR16+Y is op=0x96 & A & Y; ADDR16 {
+:ADC A," !"^ADDR16+Y is op=0x96 & A & Y; ADDR16 {
 	local addr:2 = ADDR16 + zext(Y);
 	local tmp:1 = *:1 addr;
 	local result:1;
-	aluADC(tmp, result);
+	aluADC(tmp,result);
 	A = result;
 }
 
-:ADC A, [ADDR8+X] is op=0x87 & A & X; ADDR8 {
+:ADC A,[ADDR8+X] is op=0x87 & A & X; ADDR8 {
 	local ptr:2 = ADDR8 + zext(X);
-	local addr:2 = zext(*:1 ptr);
+	local addr:2 = *:2 ptr;
 	local tmp:1 = *:1 addr;
 	local result:1;
-	aluADC(tmp, result);
+	aluADC(tmp,result);
 	A = result;
 }
 
-:ADC A, [ADDR8]+Y is op=0x97 & A & Y; ADDR8 {
-	local ptr:1 = *:1 ADDR8;
-	local addr:2 = zext(ptr + Y);
+:ADC A,[ADDR8]+Y is op=0x97 & A & Y; ADDR8 {
+	local ptr:2 = *:2 ADDR8;
+	local addr:2 = ptr + zext(Y);
 	local tmp:1 = *:1 addr;
 	local result:1;
-	aluADC(tmp, result);
+	aluADC(tmp,result);
 	A = result;
 }
 
-:ADC (X), (Y) is op=0x99 & X & Y {
+:ADC (X),(Y) is op=0x99 & X & Y {
 	local c:1 = $(CF);
 	local dst:2 = zext(X);
 	local src:2 = zext(Y);
@@ -331,7 +331,7 @@
 	#TODO: Set flags NV..H.ZC
 }
 
-:ADC dstaddr, srcaddr is op=0x89; dstaddr; srcaddr {
+:ADC dstaddr,srcaddr is op=0x89; dstaddr; srcaddr {
 	local c:1 = $(CF);
 	local src:2 = zext(srcaddr:1);
 	local dst:2 = zext(dstaddr:1);
@@ -340,7 +340,7 @@
 	#TODO: Set flags NV..H.ZC
 }
 
-:ADC ADDR8, #imm8 is op=0x98; ADDR8; imm8 {
+:ADC ADDR8," #"^imm8 is op=0x98; ADDR8; imm8 {
 	local c:1 = $(CF);
 	local dst:2 = ADDR8;
 	local tmp:1 = *:1 dst;
@@ -349,77 +349,77 @@
 }
 
 #=SBC=
-:SBC A, #imm8 is op=0xA8 & A; imm8 {
+:SBC A," #"^imm8 is op=0xA8 & A; imm8 {
 	local result:1;
-	aluSBC(imm8, result);
+	aluSBC(imm8,result);
 	A = result;
 }
 
-:SBC A, (X) is op=0xA6 & A & X {
+:SBC A,(X) is op=0xA6 & A & X {
 	local addr:2 = zext(X);
 	local tmp:1 = *:1 addr;
 	local result:1;
-	aluSBC(tmp, result);
+	aluSBC(tmp,result);
 	A = result;
 }
 
-:SBC A, ADDR8 is op=0xA4 & A; ADDR8 {
+:SBC A,ADDR8 is op=0xA4 & A; ADDR8 {
 	local tmp:1 = *:1 ADDR8;
 	local result:1;
-	aluSBC(tmp, result);
+	aluSBC(tmp,result);
 	A = result;
 }
 
-:SBC A, ADDR8+X is op=0xB4 & A & X; ADDR8 {
+:SBC A,ADDR8+X is op=0xB4 & A & X; ADDR8 {
 	local addr:2 = ADDR8 + zext(X);
 	local tmp:1 = *:1 addr;
 	local result:1;
-	aluSBC(tmp, result);
+	aluSBC(tmp,result);
 	A = result;
 }
 
-:SBC A, !ADDR16 is op=0xA5 & A; ADDR16 {
+:SBC A," !"^ADDR16 is op=0xA5 & A; ADDR16 {
 	local tmp:1 = *:1 ADDR16;
 	local result:1;
-	aluSBC(tmp, result);
+	aluSBC(tmp,result);
 	A = result;
 }
 
-:SBC A, !ADDR16+X is op=0xB5 & A & X; ADDR16 {
+:SBC A," !"^ADDR16+X is op=0xB5 & A & X; ADDR16 {
 	local addr:2 = ADDR16 + zext(X);
 	local tmp:1 = *:1 addr;
 	local result:1;
-	aluSBC(tmp, result);
+	aluSBC(tmp,result);
 	A = result;
 }
 
-:SBC A, !ADDR16+Y is op=0xB6 & A & Y; ADDR16 {
+:SBC A," !"^ADDR16+Y is op=0xB6 & A & Y; ADDR16 {
 	local addr:2 = ADDR16 + zext(Y);
 	local tmp:1 = *:1 addr;
 	local result:1;
-	aluSBC(tmp, result);
+	aluSBC(tmp,result);
 	A = result;
 }
 
-:SBC A, [ADDR8+X] is op=0xA7 & A & X; ADDR8 {
+:SBC A,[ADDR8+X] is op=0xA7 & A & X; ADDR8 {
 	local ptr:2 = ADDR8 + zext(X);
-	local addr:2 = zext(*:1 ptr);
+	local addr:2 = *:2 ptr;
 	local tmp:1 = *:1 addr;
 	local result:1;
-	aluSBC(tmp, result);
+	aluSBC(tmp,result);
 	A = result;
 }
 
-:SBC A, [ADDR8]+Y is op=0xB7 & A & Y; ADDR8 {
-	local ptr:1 = *:1 ADDR8;
-	local addr:2 = zext(ptr + Y);
+:SBC A,[ADDR8]+Y is op=0xB7 & A & Y; ADDR8 {
+	local ptr:2 = *:2 ADDR8;
+	local addr:2 = ptr + zext(Y);
 	local tmp:1 = *:1 addr;
 	local result:1;
-	aluSBC(tmp, result);
+	aluSBC(tmp,result);
 	A = result;
 }
 
-:SBC (X), (Y) is op=0xB9 & X & Y {
+:SBC (X),(Y) is op=0xB9 & X & Y {
 	local c:1 = $(CF);
 	local dst:2 = zext(X);
 	local src:2 = zext(Y);
@@ -428,7 +428,7 @@
 	#TODO: Set flags NV..H.ZC
 }
 
-:SBC dstaddr, srcaddr is op=0xA9; dstaddr; srcaddr {
+:SBC dstaddr,srcaddr is op=0xA9; dstaddr; srcaddr {
 	local c:1 = $(CF);
 	local src:2 = zext(srcaddr:1);
 	local dst:2 = zext(dstaddr:1);
@@ -437,7 +437,7 @@
 	#TODO: Set flags NV..H.ZC
 }
 
-:SBC ADDR8, #imm8 is op=0xB8; ADDR8; imm8 {
+:SBC ADDR8," #"^imm8 is op=0xB8; ADDR8; imm8 {
 	local c:1 = $(CF);
 	local dst:2 = ADDR8;
 	local tmp:1 = *:1 dst;
@@ -446,119 +446,547 @@
 }
 
 #=CMP=
-:CMP A, #imm8 is op=0x68 & A; imm8 {}
+:CMP A," #"^imm8 is op=0x68 & A; imm8 {
+	local result:1 = A - imm8;
+	
+	$(NF) = (result s< 0);
+	$(ZF) = (A == imm8);
+	$(CF) = (A < imm8);
+}
 
-:CMP A, (X) is op=0x66 & A & X {}
+:CMP A,(X) is op=0x66 & A & X {
+	local ptr:2 = zext(X);
+	local tmp:1 = *:1 ptr;
+	local result:1 = A - tmp;
+	
+	$(NF) = (result s< 0);
+	$(ZF) = (A == tmp);
+	$(CF) = (A < tmp);
+}
 
-:CMP A, ADDR8 is op=0x64 & A; ADDR8 {}
+:CMP A,ADDR8 is op=0x64 & A; ADDR8 {
+	local tmp:1 = *:1 ADDR8;
+	local result:1 = A - tmp;
+	
+	$(NF) = (result s< 0);
+	$(ZF) = (A == tmp);
+	$(CF) = (A < tmp);
+}
 
-:CMP A, ADDR8+X is op=0x74 & A & X; ADDR8 {}
+:CMP A,ADDR8+X is op=0x74 & A & X; ADDR8 {
+	local ptr:2 = ADDR8 + zext(X);
+	local tmp:1 = *:1 ptr;
+	local result:1 = A - tmp;
+	
+	$(NF) = (result s< 0);
+	$(ZF) = (A == tmp);
+	$(CF) = (A < tmp);
+}
 
-:CMP A, !ADDR16 is op=0x65 & A; ADDR16 {}
+:CMP A," !"^ADDR16 is op=0x65 & A; ADDR16 {
+	local tmp:1 = *:1 ADDR16;
+	local result:1 = A - tmp;
+	
+	$(NF) = (result s< 0);
+	$(ZF) = (A == tmp);
+	$(CF) = (A < tmp);
+}
 
-:CMP A, !ADDR16+X is op=0x75 & A & X; ADDR16 {}
+:CMP A," !"^ADDR16+X is op=0x75 & A & X; ADDR16 {
+	local ptr:2 = ADDR16 + zext(X);
+	local tmp:1 = *:1 ptr;
+	local result:1 = A - tmp;
+	
+	$(NF) = (result s< 0);
+	$(ZF) = (A == tmp);
+	$(CF) = (A < tmp);
+}
 
-:CMP A, !ADDR16+Y is op=0x76 & A & Y; ADDR16 {}
+:CMP A," !"^ADDR16+Y is op=0x76 & A & Y; ADDR16 {
+	local ptr:2 = ADDR16 + zext(Y);
+	local tmp:1 = *:1 ptr;
+	local result:1 = A - tmp;
+	
+	$(NF) = (result s< 0);
+	$(ZF) = (A == tmp);
+	$(CF) = (A < tmp);
+}
 
-:CMP A, [ADDR8+X] is op=0x67 & A & X; ADDR8 {}
+:CMP A,[ADDR8+X] is op=0x67 & A & X; ADDR8 {
+	local ptr:2 = ADDR8 + zext(X);
+	local addr:2 = *:2 ptr;
+	local tmp:1 = *:1 addr;
+	local result:1 = A - tmp;
+	
+	$(NF) = (result s< 0);
+	$(ZF) = (A == tmp);
+	$(CF) = (A < tmp);
+}
 
-:CMP A, [ADDR8]+Y is op=0x77 & A & Y; ADDR8 {}
+:CMP A,[ADDR8]+Y is op=0x77 & A & Y; ADDR8 {
+	local ptr:2 = *:2 ADDR8;
+	local addr:2 = ptr + zext(Y);
+	local tmp:1 = *:1 addr;
+	local result:1 = A - tmp;
+	
+	$(NF) = (result s< 0);
+	$(ZF) = (A == tmp);
+	$(CF) = (A < tmp);
+}
 
-:CMP (X), (Y) is op=0x79 & X & Y {}
+:CMP (X),(Y) is op=0x79 & X & Y {
+	local dst:2 = zext(X);
+	local src:2 = zext(Y);
+	local op1:1 = *:1 dst;
+	local op2:1 = *:1 src;
+	local result:1 = op1 - op2;
+	
+	$(NF) = (result s< 0);
+	$(ZF) = (op1 == op2);
+	$(CF) = (op1 < op2);
+}
 
-:CMP dstaddr, srcaddr is op=0x69; dstaddr; srcaddr {}
+:CMP dstaddr,srcaddr is op=0x69; dstaddr; srcaddr {
+	local dst:2 = zext(dstaddr:1);
+	local src:2 = zext(srcaddr:1);
+	local op1:1 = *:1 dst;
+	local op2:1 = *:1 src;
+	local result:1 = op1 - op2;
+	
+	$(NF) = (result s< 0);
+	$(ZF) = (op1 == op2);
+	$(CF) = (op1 < op2);
+}
 
-:CMP ADDR8, #imm8 is op=0x78; ADDR8; imm8 {}
+:CMP ADDR8," #"^imm8 is op=0x78; ADDR8; imm8 {
+	local op1:1 = *:1 ADDR8;
+	local result = op1 - imm8;
+	
+	$(NF) = (result s< 0);
+	$(ZF) = (op1 == imm8);
+	$(CF) = (op1 < imm8);
+}
 
-:CMP X, #imm8 is op=0xC8 & X; imm8 {}
+:CMP X," #"^imm8 is op=0xC8 & X; imm8 {
+	local result:1 = X - imm8;
+	
+	$(NF) = (result s< 0);
+	$(ZF) = (X == imm8);
+	$(CF) = (X < imm8);
+}
 
-:CMP X, ADDR8 is op=0x3E & X; ADDR8 {}
+:CMP X,ADDR8 is op=0x3E & X; ADDR8 {
+	local tmp:1 = *:1 ADDR8;
+	local result:1 = X - tmp;
+	
+	$(NF) = (result s< 0);
+	$(ZF) = (X == tmp);
+	$(CF) = (X < tmp);
+}
 
-:CMP X, !ADDR16 is op=0x1E & X; ADDR16 {}
+:CMP X," !"^ADDR16 is op=0x1E & X; ADDR16 {
+	local tmp:1 = *:1 ADDR16;
+	local result:1 = X - tmp;
+	
+	$(NF) = (result s< 0);
+	$(ZF) = (X == tmp);
+	$(CF) = (X < tmp);
+}
 
-:CMP Y, #imm8 is op=0xAD & Y; imm8 {}
+:CMP Y," #"^imm8 is op=0xAD & Y; imm8 {
+	local result:1 = Y - imm8;
+	
+	$(NF) = (result s< 0);
+	$(ZF) = (Y == imm8);
+	$(CF) = (Y < imm8);
+}
 
-:CMP Y, ADDR8 is op=0x7E & Y; ADDR8 {}
+:CMP Y,ADDR8 is op=0x7E & Y; ADDR8 {
+	local tmp:1 = *:1 ADDR8;
+	local result:1 = Y - tmp;
+	
+	$(NF) = (result s< 0);
+	$(ZF) = (Y == tmp);
+	$(CF) = (Y < tmp);
+}
 
-:CMP Y, !ADDR16 is op=0x5E & Y; ADDR16 {}
+:CMP Y," !"^ADDR16 is op=0x5E & Y; ADDR16 {
+	local tmp:1 = *:1 ADDR16;
+	local result:1 = Y - tmp;
+	
+	$(NF) = (result s< 0);
+	$(ZF) = (Y == tmp);
+	$(CF) = (Y < tmp);
+}
 
 #======================================================#
 # Table C-8: 8-bit Logic Operation Commands            #
 #======================================================#
 #=AND=
-:AND A, #imm8 is op=0x28 & A; imm8 {}
+:AND A," #"^imm8 is op=0x28 & A; imm8 {
+	local result:1 = A & imm8;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:AND A, (X) is op=0x26 & A & X {}
+:AND A,(X) is op=0x26 & A & X {
+	local ptr:2 = zext(X);
+	local tmp:1 = *:1 ptr;
+	local result:1 = A & tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:AND A, ADDR8 is op=0x24 & A; ADDR8 {}
+:AND A,ADDR8 is op=0x24 & A; ADDR8 {
+	local tmp:1 = *:1 ADDR8;
+	local result:1 = A & tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:AND A, ADDR8+X is op=0x34 & A & X; ADDR8 {}
+:AND A,ADDR8+X is op=0x34 & A & X; ADDR8 {
+	local ptr:2 = ADDR8 + zext(X);
+	local tmp:1 = *:1 ptr;
+	local result:1 = A & tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:AND A, !ADDR16 is op=0x25 & A; ADDR16 {}
+:AND A," !"^ADDR16 is op=0x25 & A; ADDR16 {
+	local tmp:1 = *:1 ADDR16;
+	local result:1 = A & tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:AND A, !ADDR16+X is op=0x35 & A & X; ADDR16 {}
+:AND A," !"^ADDR16+X is op=0x35 & A & X; ADDR16 {
+	local ptr:2 = ADDR16 + zext(X);
+	local tmp:1 = *:1 ptr;
+	local result:1 = A & tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:AND A, !ADDR16+Y is op=0x36 & A & Y; ADDR16 {}
+:AND A," !"^ADDR16+Y is op=0x36 & A & Y; ADDR16 {
+	local ptr:2 = ADDR16 + zext(Y);
+	local tmp:1 = *:1 ptr;
+	local result:1 = A & tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:AND A, [ADDR8+X] is op=0x27 & A & X; ADDR8 {}
+:AND A,[ADDR8+X] is op=0x27 & A & X; ADDR8 {
+	local ptr:2 = ADDR8 + zext(X);
+	local addr:2 = *:2 ptr;
+	local tmp:1 = *:1 addr;
+	local result:1 = A & tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:AND A, [ADDR8]+Y is op=0x37 & A & Y; ADDR8 {}
+:AND A,[ADDR8]+Y is op=0x37 & A & Y; ADDR8 {
+	local ptr:2 = *:2 ADDR8;
+	local addr:2 = ptr + zext(Y);
+	local tmp:1 = *:1 addr;
+	local result:1 = A & tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:AND (X), (Y) is op=0x39 & X & Y {}
+:AND (X),(Y) is op=0x39 & X & Y {
+	local dst:2 = zext(X);
+	local src:2 = zext(Y);
+	local op1:1 = *:1 dst;
+	local op2:1 = *:1 src;
+	local result:1 = op1 & op2;
+	
+	*:1 dst = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:AND dstaddr, srcaddr is op=0x29; dstaddr; srcaddr {}
+:AND dstaddr,srcaddr is op=0x29; dstaddr; srcaddr {
+	local dst:2 = zext(dstaddr:1);
+	local src:2 = zext(srcaddr:1);
+	local op1:1 = *:1 dst;
+	local op2:1 = *:1 src;
+	local result:1 = op1 & op2;
+	
+	*:1 dst = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:AND ADDR8, #imm8 is op=0x38; ADDR8; imm8 {}
+:AND ADDR8," #"^imm8 is op=0x38; ADDR8; imm8 {
+	local op1:1 = *:1 ADDR8;
+	local result = op1 & imm8;
+	
+	*:1 ADDR8 = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
 #=OR=
-:OR A, #imm8 is op=0x08 & A; imm8 {}
+:OR A," #"^imm8 is op=0x08 & A; imm8 {
+	local result:1 = A | imm8;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:OR A, (X) is op=0x06 & A & X {}
+:OR A,(X) is op=0x06 & A | X {
+	local ptr:2 = zext(X);
+	local tmp:1 = *:1 ptr;
+	local result:1 = A | tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:OR A, ADDR8 is op=0x04 & A; ADDR8 {}
+:OR A,ADDR8 is op=0x04 & A; ADDR8 {
+	local tmp:1 = *:1 ADDR8;
+	local result:1 = A | tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:OR A, ADDR8+X is op=0x14 & A & X; ADDR8 {}
+:OR A,ADDR8+X is op=0x14 & A & X; ADDR8 {
+	local ptr:2 = ADDR8 + zext(X);
+	local tmp:1 = *:1 ptr;
+	local result:1 = A | tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:OR A, !ADDR16 is op=0x05 & A; ADDR16 {}
+:OR A," !"^ADDR16 is op=0x05 & A; ADDR16 {
+	local tmp:1 = *:1 ADDR16;
+	local result:1 = A | tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:OR A, !ADDR16+X is op=0x15 & A & X; ADDR16 {}
+:OR A," !"^ADDR16+X is op=0x15 & A & X; ADDR16 {
+	local ptr:2 = ADDR16 + zext(X);
+	local tmp:1 = *:1 ptr;
+	local result:1 = A | tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:OR A, !ADDR16+Y is op=0x16 & A & Y; ADDR16 {}
+:OR A," !"^ADDR16+Y is op=0x16 & A & Y; ADDR16 {
+	local ptr:2 = ADDR16 + zext(Y);
+	local tmp:1 = *:1 ptr;
+	local result:1 = A | tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:OR A, [ADDR8+X] is op=0x07 & A & X; ADDR8 {}
+:OR A,[ADDR8+X] is op=0x07 & A & X; ADDR8 {
+	local ptr:2 = ADDR8 + zext(X);
+	local addr:2 = *:2 ptr;
+	local tmp:1 = *:1 addr;
+	local result:1 = A | tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:OR A, [ADDR8]+Y is op=0x17 & A & Y; ADDR8 {}
+:OR A,[ADDR8]+Y is op=0x17 & A & Y; ADDR8 {
+	local ptr:2 = *:2 ADDR8;
+	local addr:2 = ptr + zext(Y);
+	local tmp:1 = *:1 addr;
+	local result:1 = A | tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:OR (X), (Y) is op=0x19 & X & Y {}
+:OR (X),(Y) is op=0x19 & X & Y {
+	local dst:2 = zext(X);
+	local src:2 = zext(Y);
+	local op1:1 = *:1 dst;
+	local op2:1 = *:1 src;
+	local result:1 = op1 | op2;
+	
+	*:1 dst = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:OR dstaddr, srcaddr is op=0x09; dstaddr; srcaddr {}
+:OR dstaddr,srcaddr is op=0x09; dstaddr; srcaddr {
+	local dst:2 = zext(dstaddr:1);
+	local src:2 = zext(srcaddr:1);
+	local op1:1 = *:1 dst;
+	local op2:1 = *:1 src;
+	local result:1 = op1 | op2;
+	
+	*:1 dst = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:OR ADDR8, #imm8 is op=0x18; ADDR8; imm8 {}
+:OR ADDR8," #"^imm8 is op=0x18; ADDR8; imm8 {
+	local op1:1 = *:1 ADDR8;
+	local result = op1 | imm8;
+	
+	*:1 ADDR8 = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
 #=EOR=
-:EOR A, #imm8 is op=0x48 & A; imm8 {}
+:EOR A," #"^imm8 is op=0x48 & A; imm8 {
+	local result:1 = A ^ imm8;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:EOR A, (X) is op=0x46 & A & X {}
+:EOR A,(X) is op=0x46 & A & X {
+	local ptr:2 = zext(X);
+	local tmp:1 = *:1 ptr;
+	local result:1 = A ^ tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:EOR A, ADDR8 is op=0x44 & A; ADDR8 {}
+:EOR A,ADDR8 is op=0x44 & A; ADDR8 {
+	local tmp:1 = *:1 ADDR8;
+	local result:1 = A ^ tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:EOR A, ADDR8+X is op=0x54 & A & X; ADDR8 {}
+:EOR A,ADDR8+X is op=0x54 & A & X; ADDR8 {
+	local ptr:2 = ADDR8 + zext(X);
+	local tmp:1 = *:1 ptr;
+	local result:1 = A ^ tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:EOR A, !ADDR16 is op=0x45 & A; ADDR16 {}
+:EOR A," !"^ADDR16 is op=0x45 & A; ADDR16 {
+	local tmp:1 = *:1 ADDR16;
+	local result:1 = A ^ tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:EOR A, !ADDR16+X is op=0x55 & A & X; ADDR16 {}
+:EOR A," !"^ADDR16+X is op=0x55 & A & X; ADDR16 {
+	local ptr:2 = ADDR16 + zext(X);
+	local tmp:1 = *:1 ptr;
+	local result:1 = A ^ tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:EOR A, !ADDR16+Y is op=0x56 & A & Y; ADDR16 {}
+:EOR A," !"^ADDR16+Y is op=0x56 & A & Y; ADDR16 {
+	local ptr:2 = ADDR16 + zext(Y);
+	local tmp:1 = *:1 ptr;
+	local result:1 = A ^ tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:EOR A, [ADDR8+X] is op=0x47 & A & X; ADDR8 {}
+:EOR A,[ADDR8+X] is op=0x47 & A & X; ADDR8 {
+	local ptr:2 = ADDR8 + zext(X);
+	local addr:2 = *:2 ptr;
+	local tmp:1 = *:1 addr;
+	local result:1 = A ^ tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:EOR A, [ADDR8]+Y is op=0x57 & A & Y; ADDR8 {}
+:EOR A,[ADDR8]+Y is op=0x57 & A & Y; ADDR8 {
+	local ptr:2 = *:2 ADDR8;
+	local addr:2 = ptr + zext(Y);
+	local tmp:1 = *:1 addr;
+	local result:1 = A ^ tmp;
+	
+	A = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:EOR (X), (Y) is op=0x59 & X & Y {}
+:EOR (X),(Y) is op=0x59 & X & Y {
+	local dst:2 = zext(X);
+	local src:2 = zext(Y);
+	local op1:1 = *:1 dst;
+	local op2:1 = *:1 src;
+	local result:1 = op1 ^ op2;
+	
+	*:1 dst = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:EOR dstaddr, srcaddr is op=0x49; dstaddr; srcaddr {}
+:EOR dstaddr,srcaddr is op=0x49; dstaddr; srcaddr {
+	local dst:2 = zext(dstaddr:1);
+	local src:2 = zext(srcaddr:1);
+	local op1:1 = *:1 dst;
+	local op2:1 = *:1 src;
+	local result:1 = op1 ^ op2;
+	
+	*:1 dst = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
-:EOR ADDR8, #imm8 is op=0x58; ADDR8; imm8 {}
+:EOR ADDR8," #"^imm8 is op=0x58; ADDR8; imm8 {
+	local op1:1 = *:1 ADDR8;
+	local result = op1 ^ imm8;
+	
+	*:1 ADDR8 = result;
+	$(NF) = (result s< 0);
+	$(ZF) = (result == 0);
+}
 
 #======================================================#
 # Table C-9: 8-bit Addition and Subtraction Commands   #
@@ -570,7 +998,7 @@
 
 :INC ADDR8+X is op=0xBB & X; ADDR8 { local addr:2 = ADDR8 + zext(X); local tmp:1 = *:1 addr; *:1 addr = tmp + 1; }
 
-:INC !ADDR16 is op=0xAC; ADDR16 { local tmp:1 = *:1 ADDR16; *:1 ADDR16 = tmp + 1; }
+:INC "!"^ADDR16 is op=0xAC; ADDR16 { local tmp:1 = *:1 ADDR16; *:1 ADDR16 = tmp + 1; }
 
 :INC X is op=0x3D & X { X = X + 1; }
 
@@ -583,60 +1011,198 @@
 
 :DEC ADDR8+X is op=0x9B & X; ADDR8 { local addr:2 = ADDR8 + zext(X); local tmp:1 = *:1 addr; *:1 addr = tmp - 1; }
 
-:DEC !ADDR16 is op=0x8C; ADDR16 { local tmp:1 = *:1 ADDR16; *:1 ADDR16 = tmp - 1; }
+:DEC "!"^ADDR16 is op=0x8C; ADDR16 { local tmp:1 = *:1 ADDR16; *:1 ADDR16 = tmp - 1; }
 
 :DEC X is op=0x1D & X { X = X - 1; }
 
 :DEC Y is op=0xDC & Y { Y = Y - 1; }
 
 #======================================================#
-# Table C-10: Sh$(IF)t Rotation Commands                  #
+# Table C-10: Shift Rotation Commands                  #
 #======================================================#
 #=ASL=
-:ASL A is op=0x1C & A {}
+:ASL A is op=0x1C & A {
+	$(CF) = (A & 0x80);
+	A = A << 1;
+	
+	$(NF) = (A s< 0);
+	$(ZF) = (A == 0);
+}
 
-:ASL ADDR8 is op=0x0B; ADDR8 {}
+:ASL ADDR8 is op=0x0B; ADDR8 {
+	local tmp:1 = *:1 ADDR8;
+	$(CF) = (tmp & 0x80);
+	tmp = tmp << 1;
+	*:1 ADDR8 = tmp;
+	
+	$(NF) = (tmp s< 0);
+	$(ZF) = (tmp == 0);
+}
 
-:ASL ADDR8+X is op=0x1B & X; ADDR8 {}
+:ASL ADDR8+X is op=0x1B & X; ADDR8 {
+	local ptr:2 = ADDR8 + zext(X);
+	local tmp:1 = *:1 ptr;
+	$(CF) = (tmp & 0x80);
+	tmp = tmp << 1;
+	*:1 ADDR8 = ptr;
+	
+	$(NF) = (tmp s< 0);
+	$(ZF) = (tmp == 0);
+}
 
-:ASL !ADDR16 is op=0x0C; ADDR16 {}
+:ASL "!"^ADDR16 is op=0x0C; ADDR16 {
+	local tmp:1 = *:1 ADDR16;
+	$(CF) = (tmp & 0x80);
+	tmp = tmp << 1;
+	*:1 ADDR16 = tmp;
+	
+	$(NF) = (tmp s< 0);
+	$(ZF) = (tmp == 0);
+}
 
 #=LSR=
-:LSR A is op=0x5C & A {}
+:LSR A is op=0x5C & A {
+	$(CF) = (A & 0x01);
+	A = A >> 1;
+	
+	$(NF) = 0;
+	$(ZF) = (A == 0);
+}
 
-:LSR ADDR8 is op=0x4B; ADDR8 {}
+:LSR ADDR8 is op=0x4B; ADDR8 {
+	local tmp:1 = *:1 ADDR8;
+	$(CF) = (tmp & 0x01);
+	tmp = tmp >> 1;
+	*:1 ADDR8 = tmp;
+	
+	$(NF) = 0;
+	$(ZF) = (tmp == 0);
+}
 
-:LSR ADDR8+X is op=0x5B & X; ADDR8 {}
+:LSR ADDR8+X is op=0x5B & X; ADDR8 {
+	local ptr:2 = ADDR8 + zext(X);
+	local tmp:1 = *:1 ptr;
+	$(CF) = (tmp & 0x01);
+	tmp = tmp >> 1;
+	*:1 ADDR8 = ptr;
+	
+	$(NF) = 0;
+	$(ZF) = (tmp == 0);
+}
 
-:LSR !ADDR16 is op=0x4C; ADDR16 {}
+:LSR "!"^ADDR16 is op=0x4C; ADDR16 {
+	local tmp:1 = *:1 ADDR16;
+	$(CF) = (tmp & 0x01);
+	tmp = tmp >> 1;
+	*:1 ADDR16 = tmp;
+	
+	$(NF) = 0;
+	$(ZF) = (tmp == 0);
+}
 
 #=ROL=
-:ROL A is op=0x3C & A {}
+:ROL A is op=0x3C & A {
+	local c:1 = $(CF);
+	$(CF) = (A & 0x80);
+	A = (A << 1) | c;
+	
+	$(NF) = (A s< 0);
+	$(ZF) = (A == 0);
+}
 
-:ROL ADDR8 is op=0x2B; ADDR8 {}
+:ROL ADDR8 is op=0x2B; ADDR8 {
+	local c:1 = $(CF);
+	local tmp:1 = *:1 ADDR8;
+	$(CF) = (tmp & 0x80);
+	tmp = (tmp << 1) | c;
+	*:1 ADDR8 = tmp;
+	
+	$(NF) = (tmp s< 0);
+	$(ZF) = (tmp == 0);
+}
 
-:ROL ADDR8+X is op=0x3B & X; ADDR8 {}
+:ROL ADDR8+X is op=0x3B & X; ADDR8 {
+	local c:1 = $(CF);
+	local ptr:2 = ADDR8 + zext(X);
+	local tmp:1 = *:1 ptr;
+	$(CF) = (tmp & 0x80);
+	tmp = (tmp << 1) | c;
+	*:1 ADDR8 = ptr;
+	
+	$(NF) = (tmp s< 0);
+	$(ZF) = (tmp == 0);
+}
 
-:ROL !ADDR16 is op=0x2C; ADDR16 {}
+:ROL "!"^ADDR16 is op=0x2C; ADDR16 {
+	local c:1 = $(CF);
+	local tmp:1 = *:1 ADDR16;
+	$(CF) = (tmp & 0x80);
+	tmp = (tmp << 1) | c;
+	*:1 ADDR16 = tmp;
+	
+	$(NF) = (tmp s< 0);
+	$(ZF) = (tmp == 0);
+}
 
 #=ROR=
-:ROR A is op=0x7C & A {}
+:ROR A is op=0x7C & A {
+	local c:1 = $(CF) << 7;
+	$(CF) = (A & 0x01);
+	A = (A >> 1) | c;
+	
+	$(NF) = (A s< 0);
+	$(ZF) = (A == 0);
+}
 
-:ROR ADDR8 is op=0x6B; ADDR8 {}
+:ROR ADDR8 is op=0x6B; ADDR8 {
+	local c:1 = $(CF) << 7;
+	local tmp:1 = *:1 ADDR8;
+	$(CF) = (tmp & 0x01);
+	tmp = (tmp >> 1) | c;
+	*:1 ADDR8 = tmp;
+	
+	$(NF) = (tmp s< 0);
+	$(ZF) = (tmp == 0);
+}
 
-:ROR ADDR8+X is op=0x7B & X; ADDR8 {}
+:ROR ADDR8+X is op=0x7B & X; ADDR8 {
+	local c:1 = $(CF) << 7;
+	local ptr:2 = ADDR8 + zext(X);
+	local tmp:1 = *:1 ptr;
+	$(CF) = (tmp & 0x01);
+	tmp = (tmp >> 1) | c;
+	*:1 ADDR8 = ptr;
+	
+	$(NF) = (tmp s< 0);
+	$(ZF) = (tmp == 0);
+}
 
-:ROR !ADDR16 is op=0x6C; ADDR16 {}
+:ROR "!"^ADDR16 is op=0x6C; ADDR16 {
+	local c:1 = $(CF) << 7;
+	local tmp:1 = *:1 ADDR16;
+	$(CF) = (tmp & 0x01);
+	tmp = (tmp >> 1) | c;
+	*:1 ADDR16 = tmp;
+	
+	$(NF) = (tmp s< 0);
+	$(ZF) = (tmp == 0);
+}
 
 #=XCN=
-:XCN A is op=0x9F & A {}
+:XCN A is op=0x9F & A {
+	local tmp:1 = A >> 4;
+	A = A << 4 | tmp;
+	
+	$(NF) = (A s< 0);
+	$(ZF) = (A == 0);
+}
 
 #======================================================#
 # Table C-11: 16-bit Data Transmission Commands        #
 #======================================================#
-:MOVW YA, ADDR8 is op=0xBA & YA; ADDR8 { local tmp:2 = *:2 ADDR8; YA = tmp; }
+:MOVW YA,ADDR8 is op=0xBA & YA; ADDR8 { local tmp:2 = *:2 ADDR8; YA = tmp; }
 
-:MOVW ADDR8, YA is op=0xDA & YA; ADDR8 { local tmp:2 = YA; *:2 ADDR8 = tmp; }
+:MOVW ADDR8,YA is op=0xDA & YA; ADDR8 { local tmp:2 = YA; *:2 ADDR8 = tmp; }
 
 #======================================================#
 # Table C-12: 16-bit Operation Commands                #
@@ -645,18 +1211,25 @@
 
 :DECW ADDR8 is op=0x1A; ADDR8 { local tmp:2 = *:2 ADDR8; *:2 ADDR8 = tmp - 1; }
 
-:ADDW YA, ADDR8 is op=0x7A & YA; ADDR8 { local tmp:2 = YA; YA = tmp + *:2 ADDR8; }
+:ADDW YA,ADDR8 is op=0x7A & YA; ADDR8 { local tmp:2 = YA; YA = tmp + *:2 ADDR8; }
 
-:SUBW YA, ADDR8 is op=0x9A & YA; ADDR8 { local tmp:2 = YA; YA = tmp - *:2 ADDR8; }
+:SUBW YA,ADDR8 is op=0x9A & YA; ADDR8 { local tmp:2 = YA; YA = tmp - *:2 ADDR8; }
 
-:CMPW YA, ADDR8 is op=0x5A & YA; ADDR8 {}
+:CMPW YA,ADDR8 is op=0x5A & YA; ADDR8 {
+	local tmp:2 = *:2 ADDR8;
+	local result:2 = YA - tmp;
+	
+	$(NF) = (result s< 0);
+	$(ZF) = (YA == tmp);
+	$(CF) = (YA < tmp);
+}
 
 #======================================================#
 # Table C-13: Multiplication and Division Commands     #
 #======================================================#
 :MUL YA is op=0xCF & YA { local tmp:2 = zext(Y) * zext(A); YA = tmp; }
 
-:DIV YA, X is op=0x9E & YA & X {
+:DIV YA,X is op=0x9E & YA & X {
 	local dividend:2 = YA;
 	local divisor:2 = zext(X);
 	local quotient:2 = dividend / divisor;
@@ -669,9 +1242,13 @@
 #======================================================#
 # Table C-14: Decimal Compensation Commands            #
 #======================================================#
-:DAA A is op=0xDF & A {}
+:DAA A is op=0xDF & A {
+	A = daa(A);
+}
 
-:DAS A is op=0xBE & A {}
+:DAS A is op=0xBE & A {
+	A = das(A);
+}
 
 #======================================================#
 # Table C-15: Branching Commands                       #
@@ -694,80 +1271,99 @@
 
 :BPL RADDR8 is op=0x10; RADDR8 { if ($(NF)==0) goto RADDR8; }
 
-:BBS ADDR8^","^aaa, RADDR8 is op_lo=0x3 & bbb=0 & aaa; ADDR8; RADDR8 {
-
+:BBS ADDR8^","^aaa,RADDR8 is op_lo=0x3 & bbb=0 & aaa; ADDR8; RADDR8 {
+	local tmp:1 = *:1 ADDR8;
+	if ((tmp & (1 << aaa)) != 0) goto RADDR8;
 }
 
-:BBC ADDR8^","^aaa, RADDR8 is op_lo=0x3 & bbb=4 & aaa; ADDR8; RADDR8 {
-
+:BBC ADDR8^","^aaa,RADDR8 is op_lo=0x3 & bbb=4 & aaa; ADDR8; RADDR8 {
+	local tmp:1 = *:1 ADDR8;
+	if ((tmp & (1 << aaa)) == 0) goto RADDR8;
 }
 
 :CBNE ADDR8,RADDR8 is op=0x2E; ADDR8; RADDR8 {
-
+	local tmp:1 = *:1 ADDR8;
+	if (A != tmp) goto RADDR8;
 }
 
-:CBNE ADDR8+X, RADDR8 is op=0xDE & X; ADDR8; RADDR8 {
-
+:CBNE ADDR8+X,RADDR8 is op=0xDE & X; ADDR8; RADDR8 {
+	local ptr:2 = ADDR8 + zext(X);
+	local tmp:1 = *:1 ptr;
+	if (A != tmp) goto RADDR8;
 }
 
-:DBNZ ADDR8, RADDR8 is op=0x6E; ADDR8; RADDR8 {
-
+:DBNZ ADDR8,RADDR8 is op=0x6E; ADDR8; RADDR8 {
+	local tmp:1 = *:1 ADDR8;
+	tmp = tmp - 1;
+	*:1 ADDR8 = tmp;
+	if (tmp != 0) goto RADDR8;
 }
 
-:DBNZ Y, RADDR8 is op=0xFE & Y; RADDR8 {
-
+:DBNZ Y,RADDR8 is op=0xFE & Y; RADDR8 {
+	Y = Y - 1;
+	if (Y != 0) goto RADDR8;
 }
 
-:JMP !ADDR16 is op=0x5F; ADDR16 { goto ADDR16; }
+:JMP "!"^ADDR16 is op=0x5F; ADDR16 { goto ADDR16; }
 
-:JMP [!ADDR16+X] is op=0x1F & X; ADDR16 { local ptr = ADDR16 + zext(X); goto [ptr]; }
+:JMP ["!"^ADDR16+X] is op=0x1F & X; ADDR16 { local ptr = ADDR16 + zext(X); goto [ptr]; }
 
 #======================================================#
-# Table C-16: Subroutine Call, Return Commands         #
+# Table C-16: Subroutine Call,Return Commands         #
 #======================================================#
 :CALL ADDR16 is op=0x3F; ADDR16 {
-	SP = SP - 2;
-	local ptr:2 = 0x0100 + zext(SP);
-	*:2 ptr = inst_next;
+	push16(&:2 inst_next);
 	call ADDR16;
 }
 
-:PCALL ADDR8 is op=0x4F; ADDR8 {
-
+:PCALL imm8 is op=0x4F; imm8 {
+	push16(&:2 inst_next);
+	local ptr:2 = 0xFF00 + zext(imm8:1);
+	call [ptr];
 }
 
-:TCALL^op_hi is op_lo=0x1 & op_hi {
-
+:TCALL op_hi is op_lo=0x1 & op_hi {
+	local idx:1 = op_hi + 1;
+	local ptr:2 = 0xFFE0 - zext(idx * 2);
+	local addr:2 = *:2 ptr;
+	
+	push16(&:2 inst_next);
+	call [addr]; 
 }
 
-:BRK is op=0x0F {}
+:BRK is op=0x0F {
+	push16(PC);
+	push8(PSW);
+	
+	$(BF) = 1;
+	$(IF) = 0;
+	
+	PC = 0xFFDE;
+	goto [PC];
+}
 
 :RET is op=0x6F {
-	local ptr:2 = 0x0100 + zext(SP);
-	local tmp:2 = *:2 ptr;
-	SP = SP + 2;
-	
-	return [tmp];
+	pop16(PC);
+	return [PC];
 }
 
 :RETI is op=0x7F {
-	local ptr:2 = 0x0100 + zext(SP);
-	local tmp:2 = *:2 ptr;
-	SP = SP + 2;
+	pop16(PC);
+	pop8(PSW);
 	
-	return [tmp];
+	return [PC];
 }
 
 #======================================================#
 # Table C-17: Stack Operation Commands                 #
 #======================================================#
-:PUSH A is op=0x2D & A { SP = SP - 1; local ptr:2 = 0x0100 + zext(SP); *:1 ptr = A; }
+:PUSH A is op=0x2D & A { push8(A); }
 
-:PUSH X is op=0x4D & X { SP = SP - 1; local ptr:2 = 0x0100 + zext(SP); *:1 ptr = X; }
+:PUSH X is op=0x4D & X { push8(X); }
 
-:PUSH Y is op=0x6D & Y { SP = SP - 1; local ptr:2 = 0x0100 + zext(SP); *:1 ptr = Y; }
+:PUSH Y is op=0x6D & Y { push8(Y); }
 
-:PUSH PSW is op=0x0D & PSW { SP = SP - 1; local ptr:2 = 0x0100 + zext(SP); *:1 ptr = PSW; }
+:PUSH PSW is op=0x0D & PSW { push8(PSW); }
 
 :POP A is op=0xAE & A { local ptr:2 = 0x0100 + zext(SP); A = *:1 ptr; SP = SP + 1; }
 
@@ -781,19 +1377,27 @@
 # Table C-18: Bit Operation Commands                   #
 #======================================================#
 :SET1 ADDR8^"."aaa is op_lo=0x2 & bbb=0 & aaa; ADDR8 {
-
+	local tmp:1 = *:1 ADDR8;
+	tmp = tmp | (1 << aaa);
+	*:1 ADDR8 = tmp;
 }
 
 :CLR1 ADDR8^"."aaa is op_lo=0x2 & bbb=4 & aaa; ADDR8 {
-
+	local tmp:1 = *:1 ADDR8;
+	tmp = tmp & ~(1 << aaa);
+	*:1 ADDR8 = tmp;
 }
 
-:TSET1 !ADDR16 is op=0x0E; ADDR16 {
-
+:TSET1 "!"^ADDR16 is op=0x0E; ADDR16 {
+	local tmp:1 = *:1 ADDR16;
+	local result:1 = tmp | A;
+	*:1 ADDR16 = result;
 }
 
-:TCLR1 !ADDR16 is op=0x4E; ADDR16 {
-
+:TCLR1 "!"^ADDR16 is op=0x4E; ADDR16 {
+	local tmp:1 = *:1 ADDR16;
+	local result:1 = tmp & ~A;
+	*:1 ADDR16 = result;
 }
 
 :AND1 "C," ADDR8^"."imm8 is op=0x4A; ADDR8; imm8 {
@@ -866,8 +1470,8 @@
 #======================================================#
 # Table C-20: Other Commands                           #
 #======================================================#
-:NOP is op=0x00 {}
+:NOP is op=0x00 { nop(); }
 
-:SLEEP is op=0xEF {}
+:SLEEP is op=0xEF { sleep(); }
 
-:STOP is op=0xFF {}
+:STOP is op=0xFF { stop(); }
