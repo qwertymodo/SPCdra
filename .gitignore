@@ -74,6 +74,8 @@ gradle-app.setting
 .gradletasknamecache
 
 # Build outputs
+/build/**/*.class
+/build/**/*.jar
 dist/
 
 # Don't commit the processor manual to the repository because it is copyrighted
