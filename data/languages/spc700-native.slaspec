@@ -229,13 +229,13 @@
 }
 
 :MOV X,SP is op=0x9D & X & SP {
-	X = SP;
+	X = SP:1;
 	
 	resultFlags(X);
 }
 
 :MOV SP,X is op=0xBD & X & SP {
-	SP = X;
+	SP = 0x0100 + zext(X);
 }
 
 :MOV dstaddr,srcaddr is op=0xFA; dstaddr; srcaddr {
@@ -1312,12 +1312,12 @@
 # Table C-16: Subroutine Call,Return Commands         #
 #======================================================#
 :CALL ADDR16 is op=0x3F; ADDR16 {
-	push16(&:2 inst_next);
+	#push16(&:2 inst_next);
 	call ADDR16;
 }
 
 :PCALL imm8 is op=0x4F; imm8 {
-	push16(&:2 inst_next);
+	#push16(&:2 inst_next);
 	local ptr:2 = 0xFF00 + zext(imm8:1);
 	call [ptr];
 }
@@ -1327,7 +1327,7 @@
 	local ptr:2 = 0xFFE0 - zext(idx * 2);
 	local addr:2 = *:2 ptr;
 	
-	push16(&:2 inst_next);
+	#push16(&:2 inst_next);
 	call [addr]; 
 }
 
@@ -1365,13 +1365,13 @@
 
 :PUSH PSW is op=0x0D & PSW { push8(PSW); }
 
-:POP A is op=0xAE & A { local ptr:2 = 0x0100 + zext(SP); A = *:1 ptr; SP = SP + 1; }
+:POP A is op=0xAE & A { pop8(A); }
 
-:POP X is op=0xCE & X { local ptr:2 = 0x0100 + zext(SP); X = *:1 ptr; SP = SP + 1; }
+:POP X is op=0xCE & X { pop8(X); }
 
-:POP Y is op=0xEE & Y { local ptr:2 = 0x0100 + zext(SP); Y = *:1 ptr; SP = SP + 1; }
+:POP Y is op=0xEE & Y { pop8(Y); }
 
-:POP PSW is op=0x8E & PSW { local ptr:2 = 0x0100 + zext(SP); PSW = *:1 ptr; SP = SP + 1; }
+:POP PSW is op=0x8E & PSW { pop8(PSW); }
 
 #======================================================#
 # Table C-18: Bit Operation Commands                   #

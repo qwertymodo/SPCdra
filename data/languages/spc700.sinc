@@ -5,8 +5,9 @@ define alignment=1;
 define space ram     type=ram_space      size=2  default;
 define space register type=register_space size=1;
 
-define register offset=0x00 size=2 [ YA _ _ PC ];
-define register offset=0x00 size=1 [ A Y X _ SP PSW _ _ ];
+define register offset=0x00 size=2 [ YA _ ];
+define register offset=0x00 size=1 [ A Y X PSW ];
+define register offset=0x04 size=2 [ PC SP ];
 
 #define 	bitrange CF=PSW[0,1]
 #		bitrange ZF=PSW[1,1]
@@ -64,25 +65,21 @@ define pcodeop stop;
 ################################################################
 macro push8(value) {
 	SP = SP - 1;
-	local ptr:2 = 0x0100 + zext(SP);
-	*:1 ptr = value;
+	*:1 (SP) = value;
 }
 
 macro pop8(result) {
-	local ptr:2 = 0x0100 + zext(SP);
-	result = *:1 ptr;
+	result = *:1 (SP);
 	SP = SP + 1;
 }
 
 macro push16(value) {
 	SP = SP - 2;
-	local ptr:2 = 0x0100 + zext(SP);
-	*:2 ptr = value;
+	*:2 (SP) = value;
 }
 
 macro pop16(result) {
-	local ptr:2 = 0x0100 + zext(SP);
-	result = *:2 ptr;
+	result = *:2 (SP);
 	SP = SP + 2;
 }
 

@@ -76,6 +76,7 @@ gradle-app.setting
 # Build outputs
 /build/**/*.class
 /build/**/*.jar
+*.sla
 dist/
 
 # Don't commit the processor manual to the repository because it is copyrighted
