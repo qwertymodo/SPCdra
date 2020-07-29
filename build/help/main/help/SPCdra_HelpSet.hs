@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='ISO-8859-1' ?>
 <!DOCTYPE helpset PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp HelpSet Version 2.0//EN" "http://java.sun.com/products/javahelp/helpset_2_0.dtd">
 
-<!-- HelpSet auto-generated on Mon Apr 27 17:50:04 PDT 2020 -->
+<!-- HelpSet auto-generated on Fri Jul 24 18:55:50 PDT 2020 -->
 <helpset version="2.0">
 	<title>SPCdra HelpSet</title>
 	<maps>

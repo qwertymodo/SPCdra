@@ -238,13 +238,13 @@
 	SP = 0x0100 + zext(X);
 }
 
-:MOV dstaddr,srcaddr is op=0xFA; dstaddr; srcaddr {
+:MOV dstaddr,srcaddr is op=0xFA; srcaddr; dstaddr {
 	local src:2 = zext(srcaddr:1);
 	local dst:2 = zext(dstaddr:1);
 	*:1 dst = *:1 src;
 } 
 
-:MOV ADDR8," #"^imm8 is op=0x8F; ADDR8; imm8 {
+:MOV ADDR8," #"^imm8 is op=0x8F; imm8; ADDR8 {
 	*:1 ADDR8 = imm8;
 }
 
@@ -331,7 +331,7 @@
 	#TODO: Set flags NV..H.ZC
 }
 
-:ADC dstaddr,srcaddr is op=0x89; dstaddr; srcaddr {
+:ADC dstaddr,srcaddr is op=0x89; srcaddr; dstaddr {
 	local c:1 = $(CF);
 	local src:2 = zext(srcaddr:1);
 	local dst:2 = zext(dstaddr:1);
@@ -340,7 +340,7 @@
 	#TODO: Set flags NV..H.ZC
 }
 
-:ADC ADDR8," #"^imm8 is op=0x98; ADDR8; imm8 {
+:ADC ADDR8," #"^imm8 is op=0x98; imm8; ADDR8 {
 	local c:1 = $(CF);
 	local dst:2 = ADDR8;
 	local tmp:1 = *:1 dst;
@@ -428,7 +428,7 @@
 	#TODO: Set flags NV..H.ZC
 }
 
-:SBC dstaddr,srcaddr is op=0xA9; dstaddr; srcaddr {
+:SBC dstaddr,srcaddr is op=0xA9; srcaddr; dstaddr {
 	local c:1 = $(CF);
 	local src:2 = zext(srcaddr:1);
 	local dst:2 = zext(dstaddr:1);
@@ -437,7 +437,7 @@
 	#TODO: Set flags NV..H.ZC
 }
 
-:SBC ADDR8," #"^imm8 is op=0xB8; ADDR8; imm8 {
+:SBC ADDR8," #"^imm8 is op=0xB8; imm8; ADDR8 {
 	local c:1 = $(CF);
 	local dst:2 = ADDR8;
 	local tmp:1 = *:1 dst;
@@ -546,11 +546,12 @@
 	$(CF) = (op1 < op2);
 }
 
-:CMP dstaddr,srcaddr is op=0x69; dstaddr; srcaddr {
+:CMP dstaddr,srcaddr is op=0x69; srcaddr; dstaddr {
 	local dst:2 = zext(dstaddr:1);
 	local src:2 = zext(srcaddr:1);
 	local op1:1 = *:1 dst;
 	local op2:1 = *:1 src;
+	#TODO: Confirm whether this should be op1 - op2 or op2 - op1 
 	local result:1 = op1 - op2;
 	
 	$(NF) = (result s< 0);
@@ -558,7 +559,7 @@
 	$(CF) = (op1 < op2);
 }
 
-:CMP ADDR8," #"^imm8 is op=0x78; ADDR8; imm8 {
+:CMP ADDR8," #"^imm8 is op=0x78; imm8; ADDR8 {
 	local op1:1 = *:1 ADDR8;
 	local result = op1 - imm8;
 	
@@ -723,7 +724,7 @@
 	$(ZF) = (result == 0);
 }
 
-:AND dstaddr,srcaddr is op=0x29; dstaddr; srcaddr {
+:AND dstaddr,srcaddr is op=0x29; srcaddr; dstaddr {
 	local dst:2 = zext(dstaddr:1);
 	local src:2 = zext(srcaddr:1);
 	local op1:1 = *:1 dst;
@@ -735,7 +736,7 @@
 	$(ZF) = (result == 0);
 }
 
-:AND ADDR8," #"^imm8 is op=0x38; ADDR8; imm8 {
+:AND ADDR8," #"^imm8 is op=0x38; imm8; ADDR8 {
 	local op1:1 = *:1 ADDR8;
 	local result = op1 & imm8;
 	
@@ -845,7 +846,7 @@
 	$(ZF) = (result == 0);
 }
 
-:OR dstaddr,srcaddr is op=0x09; dstaddr; srcaddr {
+:OR dstaddr,srcaddr is op=0x09; srcaddr; dstaddr {
 	local dst:2 = zext(dstaddr:1);
 	local src:2 = zext(srcaddr:1);
 	local op1:1 = *:1 dst;
@@ -857,7 +858,7 @@
 	$(ZF) = (result == 0);
 }
 
-:OR ADDR8," #"^imm8 is op=0x18; ADDR8; imm8 {
+:OR ADDR8," #"^imm8 is op=0x18; imm8; ADDR8 {
 	local op1:1 = *:1 ADDR8;
 	local result = op1 | imm8;
 	
@@ -967,7 +968,7 @@
 	$(ZF) = (result == 0);
 }
 
-:EOR dstaddr,srcaddr is op=0x49; dstaddr; srcaddr {
+:EOR dstaddr,srcaddr is op=0x49; srcaddr; dstaddr {
 	local dst:2 = zext(dstaddr:1);
 	local src:2 = zext(srcaddr:1);
 	local op1:1 = *:1 dst;
@@ -979,7 +980,7 @@
 	$(ZF) = (result == 0);
 }
 
-:EOR ADDR8," #"^imm8 is op=0x58; ADDR8; imm8 {
+:EOR ADDR8," #"^imm8 is op=0x58; imm8; ADDR8 {
 	local op1:1 = *:1 ADDR8;
 	local result = op1 ^ imm8;
 	
@@ -1400,49 +1401,49 @@
 	*:1 ADDR16 = result;
 }
 
-:AND1 "C," ADDR8^"."imm8 is op=0x4A; ADDR8; imm8 {
+:AND1 "C," ADDR8^"."imm8 is op=0x4A; imm8; ADDR8 {
 	local tmp = *:1 ADDR8;
 	tmp = tmp & (1 << imm8);
 	$(CF) = $(CF) & (tmp != 0);
 }
 
-:AND1 "C," "/"^ADDR8^"."imm8 is op=0x6A; ADDR8; imm8 {
+:AND1 "C," "/"^ADDR8^"."imm8 is op=0x6A; imm8; ADDR8 {
 	local tmp = *:1 ADDR8;
 	tmp = tmp & ~(1 << imm8);
 	$(CF) = $(CF) & (tmp != 0);
 }
 
-:OR1 "C," ADDR8^"."imm8 is op=0x0A; ADDR8; imm8 {
+:OR1 "C," ADDR8^"."imm8 is op=0x0A; imm8; ADDR8 {
 	local tmp = *:1 ADDR8;
 	tmp = tmp | (1 << imm8);
 	$(CF) = $(CF) | (tmp != 0);
 }
 
-:OR1 "C," "/"^ADDR8^"."imm8 is op=0x2A; ADDR8; imm8 {
+:OR1 "C," "/"^ADDR8^"."imm8 is op=0x2A; imm8; ADDR8 {
 	local tmp = *:1 ADDR8;
 	tmp = tmp | ~(1 << imm8);
 	$(CF) = $(CF) | (tmp != 0);
 }
 
-:EOR1 "C," ADDR8^"."imm8 is op=0x8A; ADDR8; imm8 {
+:EOR1 "C," ADDR8^"."imm8 is op=0x8A; imm8; ADDR8 {
 	local tmp = *:1 ADDR8;
 	tmp = tmp ^ (1 << imm8);
 	$(CF) = $(CF) ^ (tmp != 0);
 }
 
-:NOT1 ADDR8^"."imm8 is op=0xEA; ADDR8; imm8 {
+:NOT1 ADDR8^"."imm8 is op=0xEA; imm8; ADDR8 {
 	local tmp = *:1 ADDR8;
 	tmp = tmp ^ (1 << imm8);
 	*:1 ADDR8 = tmp;
 }
 
-:MOV1 "C," ADDR8^"."imm8 is op=0xAA; ADDR8; imm8 {
+:MOV1 "C," ADDR8^"."imm8 is op=0xAA; imm8; ADDR8 {
 	local tmp = *:1 ADDR8;
 	tmp = tmp & (1 << imm8);
 	$(CF) = (tmp != 0);
 }
 
-:MOV1 ADDR8^"."imm8^", C" is op=0xCA; ADDR8; imm8 {
+:MOV1 ADDR8^"."imm8^", C" is op=0xCA; imm8; ADDR8 {
 	local tmp = *:1 ADDR8;
 	tmp = tmp & ~(1 << imm8);
 	*:1 ADDR8 = tmp | ($(CF) << imm8);
