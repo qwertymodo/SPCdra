@@ -46,9 +46,6 @@ public class SPCLoader extends AbstractLibrarySupportLoader {
 	@Override
 	public String getName() {
 
-		// TODO: Name the loader.  This name must match the name of the loader in the .opinion 
-		// files.
-
 		return "SPC700";
 	}
 
@@ -56,9 +53,6 @@ public class SPCLoader extends AbstractLibrarySupportLoader {
 	public Collection<LoadSpec> findSupportedLoadSpecs(ByteProvider provider) throws IOException {
 		List<LoadSpec> loadSpecs = new ArrayList<>();
 
-		// TODO: Examine the bytes in 'provider' to determine if this loader can load it.  If it 
-		// can load it, return the appropriate load specifications.
-		
 		if(new String(provider.getInputStream(0).readNBytes(33),0,33).compareTo("SNES-SPC700 Sound File Data v0.30") != 0)
 			return loadSpecs;
 		
@@ -74,7 +68,6 @@ public class SPCLoader extends AbstractLibrarySupportLoader {
 		var as = program.getAddressFactory().getDefaultAddressSpace();
 		var spc = MemoryBlockUtils.createFileBytes(program, provider, monitor);
 
-		// TODO: Load the bytes from 'provider' into the 'program'.
 		try {
 			createInitializedBlock(program, false, "ram", as.getAddress(0x0000), spc, 0x100, 0x10000, "", "", true, true, true, log);
 			var st = program.getSymbolTable();
@@ -98,13 +91,10 @@ public class SPCLoader extends AbstractLibrarySupportLoader {
 			int ep = Integer.parseInt(op, 16);
 			st.addExternalEntryPoint(as.getAddress(ep));
 		} catch (AddressOverflowException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (AddressOutOfBoundsException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidInputException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
