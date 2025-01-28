@@ -1,23 +1,72 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!doctype html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
-<HTML>
-  <HEAD>
-    <META name="generator" content=
-    "HTML Tidy for Java (vers. 2009-12-01), see jtidy.sourceforge.net">
-    <META http-equiv="Content-Language" content="en-us">
-    <META http-equiv="Content-Type" content="text/html; charset=windows-1252">
-    <META name="GENERATOR" content="Microsoft FrontPage 4.0">
-    <META name="ProgId" content="FrontPage.Editor.Document">
+<html>
 
-    <TITLE>Skeleton Help File for a Module</TITLE>
-    <LINK rel="stylesheet" type="text/css" href="../../shared/Frontpage.css">
-  </HEAD>
+<head>
+  <meta name="generator" content="HTML Tidy for Java (vers. 2009-12-01), see jtidy.sourceforge.net">
+  <meta http-equiv="Content-Language" content="en-us">
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  <meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+  <meta name="ProgId" content="FrontPage.Editor.Document">
 
-  <BODY>
-    <H1><a name="HelpAnchor"></a>Skeleton Help File for a Module</H1>
+  <title>SPCdra Help File</title>
+  <link rel="stylesheet" type="text/css" href="help/shared/DefaultStyle.css">
+  </head>
 
-    <P>This is a simple skeleton help topic. For a better description of what should and should not
-    go in here, see the "sample" Ghidra extension in the Extensions/Ghidra directory, or see your 
-    favorite help topic. In general, language modules do not have their own help topics.</P>
-  </BODY>
-</HTML>
+<body>
+  <h1 id="spcdra-spc700-loader-for-ghidra">SPCdra: SPC700 loader for Ghidra</h1>
+  <p><strong>Very experimental! No compatibility guarantees.</strong></p>
+  <h2 id="features">Features</h2>
+  <ul>
+    <li>Sony/Nintendo SPC700 APU support for Sleigh</li>
+    <li>SPC file loader</li>
+    <li>Symbols for hardware registers</li>
+    <li>Processor manual index (manual available from <a href="https://archive.org/details/SNESDevManual">The Internet
+        Archive</a>)</li>
+  </ul>
+  <h2 id="how-to-install">How to install</h2>
+  <ol>
+    <li>Start Ghidra</li>
+    <li>File -&gt; Install Extensions</li>
+    <li>Press the &#39;+&#39; icon (&quot;Add extension&quot;)</li>
+    <li>Choose the built or downloaded SPCdra zip file</li>
+    <li>Restart Ghidra when prompted to load the extension properly</li>
+  </ol>
+  <h2 id="loading-files">Loading files</h2>
+  <ol>
+    <li>Start Ghidra</li>
+    <li>Create a new project</li>
+    <li>File -&gt; Import File</li>
+    <li>Select the .spc file you want to load</li>
+    <li>Click Options...</li>
+    <li>Type the main entrypoint address for the SPC engine (see below for details)</li>
+    <li>Click OK</li>
+  </ol>
+  <h2 id="finding-the-spc-engine-entrypoint-address">Finding the SPC engine entrypoint address</h2>
+  <p>Finding the actual entrypoint for a given .spc file is important, because without it, it will be difficult to
+    determine where to begin disassembly and analysis. By default, the loader will use the PC address stored in the .spc
+    file metadata, but this is typically not going to be the actual entrypoint, but rather, whatever instruction the SPC
+    was executing when the file was dumped. To find the actual entrypoint, you will need <a
+      href="https://github.com/devinacker/bsnes-plus/releases/latest">bsnes+</a> as well as the game ROM that the .spc
+    file was dumped from.</p>
+  <ol>
+    <li>Start bsnes+</li>
+    <li>Tools -&gt; Debugger</li>
+    <li>(In the Debugger window) Click &quot;Break&quot;</li>
+    <li>(In the Main window) System -&gt; Load Cartridge . . . -&gt; Select game ROM</li>
+    <li>(In the Debugger window) Tools -&gt; Breakpoint Editor</li>
+    <li>(In the Breakpoint window) Click &quot;Add&quot;</li>
+    <li>Double-click the empty cell under &quot;End (optional)&quot; and type &quot;fbff&quot;</li>
+    <li>Check the box under &#39;X&#39;</li>
+    <li>Under &quot;Source&quot;, select &quot;S-SMP bus&quot;</li>
+  </ol>
+  <p><img src="help/shared/bsnes_entrypoint_breakpoint.png" alt="Breakpoint Window"> </p>
+  <ol>
+    <li>(In the Debugger window) Click &quot;Run&quot; </li>
+    <li>Once the breakpoint is hit, the address of the current instruction is the entrypoint address</li>
+  </ol>
+  <p><img src="help/shared/bsnes_entrypoint_debugger.png" alt="Debugger Window"> </p>
+  <h2 id="license">License</h2>
+  <p>Licensed under the Apache License, Version 2.0</p>
+</body>
+</html>
