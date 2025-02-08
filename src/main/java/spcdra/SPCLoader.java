@@ -52,15 +52,13 @@ public class SPCLoader extends AbstractLibrarySupportLoader {
 	@Override
 	public Collection<LoadSpec> findSupportedLoadSpecs(ByteProvider provider) throws IOException {
 		List<LoadSpec> loadSpecs = new ArrayList<>();
-
-		// TODO: Examine the bytes in 'provider' to determine if this loader can load it.  If it 
-		// can load it, return the appropriate load specifications.
 		
 		try {
 			if(new String(provider.getInputStream(0).readNBytes(33),0,33).compareTo("SNES-SPC700 Sound File Data v0.30") != 0)
 				return loadSpecs;
 			
 			loadSpecs.add(new LoadSpec(this, 0, new LanguageCompilerSpecPair("spc700:LE:16:default", "default"), true));
+			loadSpecs.add(new LoadSpec(this, 0, new LanguageCompilerSpecPair("spc700:LE:16:65816", "default"), true));
 		} catch(IllegalArgumentException e) {}
 		
 		return loadSpecs;
