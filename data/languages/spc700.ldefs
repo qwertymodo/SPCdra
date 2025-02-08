@@ -12,7 +12,19 @@
             processorspec="spc700.pspec"
             manualindexfile="../manuals/spc700-native.idx"
             id="spc700:LE:16:default">
-    <description>SPC700 Language Module</description>
+    <description>SPC700 Language Module (Official Mnemonics)</description>
+    <compiler name="default" spec="spc700.cspec" id="default"/>
+  </language> 
+   <language processor="SPC700"
+            endian="little"
+            size="16"
+            variant="65816"
+            version="1.0"
+            slafile="spc700-65816.sla"
+            processorspec="spc700.pspec"
+            manualindexfile="../manuals/spc700-65816.idx"
+            id="spc700:LE:16:65816">
+    <description>SPC700 Language Module (65816-Style Mnemonics)</description>
     <compiler name="default" spec="spc700.cspec" id="default"/>
   </language> 
 </language_definitions>
