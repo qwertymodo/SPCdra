@@ -754,7 +754,7 @@
 	$(ZF) = (result == 0);
 }
 
-:OR A,(X) is op=0x06 & A | X {
+:OR A,(X) is op=0x06 & A & X {
 	local ptr:2 = zext(X);
 	local tmp:1 = *:1 ptr;
 	local result:1 = A | tmp;
