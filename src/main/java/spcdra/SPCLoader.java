@@ -65,15 +65,14 @@ public class SPCLoader extends AbstractLibrarySupportLoader {
 	}
 
 	@Override
-	protected void load(ByteProvider provider, LoadSpec loadSpec, List<Option> options,
-			Program program, TaskMonitor monitor, MessageLog log)
+	protected void load(Program program, ImporterSettings settings)
 			throws CancelledException, IOException {
 		
 		var as = program.getAddressFactory().getDefaultAddressSpace();
-		var spc = MemoryBlockUtils.createFileBytes(program, provider, monitor);
+		var spc = MemoryBlockUtils.createFileBytes(program, settings.provider(), settings.monitor());
 
 		try {
-			createInitializedBlock(program, false, "ram", as.getAddress(0x0000), spc, 0x100, 0x10000, "", "", true, true, true, log);
+			createInitializedBlock(program, false, "ram", as.getAddress(0x0000), spc, 0x100, 0x10000, "", "", true, true, true, settings.log());
 			var st = program.getSymbolTable();
 			st.createLabel(as.getAddress(0xF0), "TEST_REGISTER", SourceType.IMPORTED);
 			st.createLabel(as.getAddress(0xF1), "CONTROL_REGISTER", SourceType.IMPORTED);
@@ -91,7 +90,7 @@ public class SPCLoader extends AbstractLibrarySupportLoader {
 			st.createLabel(as.getAddress(0xFF), "COUNTER3", SourceType.IMPORTED);
 			st.createLabel(as.getAddress(0xFFC0), "IPL", SourceType.IMPORTED);
 			
-			var op = OptionUtils.getOption(OPT_EP_ADDRESS, options, "0");
+			String op = OptionUtils.getOption(OPT_EP_ADDRESS, settings.options(), "0");
 			int ep = Integer.parseInt(op, 16);
 			st.addExternalEntryPoint(as.getAddress(ep));
 		} catch (AddressOverflowException e) {
@@ -105,9 +104,9 @@ public class SPCLoader extends AbstractLibrarySupportLoader {
 
 	@Override
 	public List<Option> getDefaultOptions(ByteProvider provider, LoadSpec loadSpec,
-			DomainObject domainObject, boolean isLoadIntoProgram) {
+			DomainObject domainObject, boolean isLoadIntoProgram, boolean mirrorFsLayout) {
 		List<Option> list =
-			super.getDefaultOptions(provider, loadSpec, domainObject, isLoadIntoProgram);
+			super.getDefaultOptions(provider, loadSpec, domainObject, isLoadIntoProgram, mirrorFsLayout);
 		
 		int ep = -1;
 		try {
